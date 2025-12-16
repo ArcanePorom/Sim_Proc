@@ -1,0 +1,29 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+*.eggs/
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# IDE/editor
+.vscode/
+.idea/
+
+# Virtual environments
+.venv/
+venv/
+
+# Local wheels/cache
+vendor/
+
+# Simulation outputs (generated)
+simc_data/
+Temp/
+
+# Logs/temp
+*.log
+*.tmp

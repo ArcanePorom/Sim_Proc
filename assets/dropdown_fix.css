@@ -1,0 +1,47 @@
+/* Force dark background and white text for Dash dropdowns (dcc.Dropdown, React Select) */
+.Select-menu-outer, .Select-menu, .VirtualizedSelectOption, .Select-option, .Select-value-label, .Select-value, .Select-control, .Select-placeholder {
+    background-color: #23233a !important;
+    color: #fff !important;
+    font-size: 1.08em !important;
+    font-weight: bold !important;
+    opacity: 1 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+.Select-option, .VirtualizedSelectOption {
+    background-color: #23233a !important;
+    color: #fff !important;
+    opacity: 1 !important;
+    font-size: 1.08em !important;
+    font-weight: bold !important;
+    border-bottom: 1px solid #333 !important;
+    cursor: pointer !important;
+    transition: background 0.1s, color 0.1s;
+}
+.Select-option.is-focused, .VirtualizedSelectOption.is-focused {
+    background-color: #2b2b3c !important;
+    color: #fff !important;
+    opacity: 1 !important;
+}
+.Select-option.is-selected, .VirtualizedSelectOption.is-selected {
+    background-color: #44446a !important;
+    color: #fff !important;
+    opacity: 1 !important;
+}
+.Select-value-label, .Select-value {
+    color: #fff !important;
+    background-color: #23233a !important;
+    opacity: 1 !important;
+}
+.Select-noresults {
+    color: #ffc8dd !important;
+    background-color: #23233a !important;
+    font-size: 1.08em !important;
+    padding: 0.5em 1em !important;
+    opacity: 1 !important;
+}
+.Select-option[aria-disabled="true"], .VirtualizedSelectOption[aria-disabled="true"] {
+    color: #888 !important;
+    background-color: #23233a !important;
+    opacity: 1 !important;
+}

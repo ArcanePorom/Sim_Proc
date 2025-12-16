@@ -1,0 +1,19 @@
+.talent-img {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 2px solid #444;
+  background-color: #2a2f36;
+  cursor: pointer;
+}
+
+.talent-img.included {
+  border-color: #28a745;
+  background-color: #28a74520;
+}
+
+.talent-img.blocked {
+  border-color: #dc3545;
+  background-color: #dc354520;
+}

@@ -1,0 +1,170 @@
+override.bloodlust=1
+override.arcane_intellect=1
+override.power_word_fortitude=1
+override.battle_shout=1
+override.mystic_touch=1
+override.chaos_brand=1
+override.skyfury=1
+override.mark_of_the_wild=1
+override.bleeding=1
+single_actor_batch=1
+report_details=1
+target_error=0.05
+optimize_expressions=1
+iterations=100000
+max_time=300
+scale_only=intellect,crit,mastery,vers,haste
+calculate_scale_factors=0
+desired_targets=1
+fight_style=patchwerk
+
+
+profileset_metric=dps/:prioritydps
+profileset_output_data=race/:gear/:stats/:talents
+# enable the Blizzard APL
+# use_blizzard_action_list=1
+# add one button penalty and automatically interrupt channels
+# one_button_mode=1
+# disable cooldowns with Blizzard APL
+# use_cds_with_blizzard_action_list=0
+# select actions before casts finish (optional, but more accurate for casters with the Blizzard APL)
+# enable_spell_queue=1
+# regular combat
+# can_have_one_button_penalty=0
+# cooldown_allow_casting_success=1
+# assisted combat
+# can_have_one_button_penalty=1
+# cooldown_allow_casting_success=0
+# enemy=Fluffy_Pillow
+# enemy_fixed_health_percentage=100
+# enemy_initial_health_percentage=35
+# vary_combat_length=0.0
+# fixed_time=1
+# calculate_scale_factors=1
+# dps_plot_stat=haste,crit_rating,mastery
+# bloodlust_time=220
+# override.precombat_state=buff.clearcasting.stack=1
+# override.precombat_state=cooldown.treacherous_transmitter_221023=80
+# override.precombat_state=buff.ethereal_powerlink
+# apl_variable.sunfury_aoe_list=1
+# mage.treat_bloodlust_as_time_warp=1
+# set_bonus=name=thewarwithin_season_3,pc=2,hero_tree=sunfury,enable=0
+# set_bonus=name=thewarwithin_season_3,pc=4,hero_tree=sunfury,enable=0
+# ptr=1
+
+
+# Baseline profiles
+# copy="Sunfury_ST"
+# talents=
+
+# copy="Sunfury_AOE,Sunfury_ST"
+# talents=
+
+# copy="Spellslinger_ST,Sunfury_ST"
+# talents=C4DAAAAAAAAAAAAAAAAAAAAAAYGmZZmZmFmZGaGzAAAwAAgAmZmZZZmJWAAYbMzMjZbz2MzMmZMGzMzM2YmZGzAAMAAAwMzMLAAMDAA
+
+# copy="Spellslinger_AOE,Sunfury_ST"
+# talents=C4DAAAAAAAAAAAAAAAAAAAAAAYGmZZmZmFmZGaGzAAAwAAgAmZmZZZmJWAAYbGzMjhZbmZGzMzYMzMzYjZmZMDAwAAAAzMzsAAwMAA
+
+
+# Explore
+
+
+
+
+
+
+
+
+
+mage="baseline"
+source=default
+spec=arcane
+level=90
+race=void_elf
+role=spell
+position=back
+talents=C4DAAAAAAAAAAAAAAAAAAAAAAYGmZZmZmFmZGaGzAAAwAAgAmZmZZZmJWAAYbmZmZmZbx2MzMLjxYMzMGbMzMjBAwAAAAzMzsAAwMAA
+
+potion=disabled
+flask=disabled
+food=disabled
+augmentation=disabled
+temporary_enchant=disabled
+
+# Executed before combat begins. Accepts non-harmful actions only.
+actions.precombat=arcane_intellect
+actions.precombat+=/variable,name=aoe_target_count,op=reset,default=2
+actions.precombat+=/variable,name=opener,op=set,value=1
+actions.precombat+=/variable,name=aoe_list,default=0,op=reset
+actions.precombat+=/variable,name=steroid_trinket_equipped,op=set,value=equipped.arazs_ritual_forge
+actions.precombat+=/variable,name=nonsteroid_trinket_equipped,op=set,value=equipped.blastmaster3000
+actions.precombat+=/snapshot_stats
+actions.precombat+=/mirror_image
+actions.precombat+=/arcane_blast
+
+actions=counterspell
+actions+=/potion,if=buff.arcane_surge.up
+actions+=/lights_judgment,if=buff.arcane_surge.up&debuff.touch_of_the_magi.down
+actions+=/berserking,if=buff.arcane_surge.up
+actions+=/blood_fury,if=buff.arcane_surge.up
+actions+=/fireblood,if=buff.arcane_surge.up
+actions+=/ancestral_call,if=buff.arcane_surge.up
+actions+=/use_items,if=buff.arcane_surge.up
+actions+=/arcane_barrage,if=fight_remains<2
+actions+=/variable,name=opener,op=set,if=debuff.touch_of_the_magi.up&variable.opener,value=0
+actions+=/call_action_list,name=cooldowns,if=cooldown.arcane_surge.up|cooldown.touch_of_the_magi.up
+actions+=/call_action_list,name=spellslinger_aoe,if=!talent.spellfire_spheres&active_enemies>variable.aoe_target_count
+actions+=/call_action_list,name=spellslinger_st,if=!talent.spellfire_spheres
+actions+=/arcane_barrage
+
+# tota, aegwynn tech
+actions.cooldowns=arcane_orb,if=(buff.arcane_charge.stack<4|!talent.spellfire_spheres)&cooldown.arcane_surge.ready
+actions.cooldowns+=/arcane_blast,if=buff.arcane_charge.stack<4&variable.opener&!talent.arcane_orb
+actions.cooldowns+=/arcane_barrage,if=buff.arcane_surge.up&variable.opener
+actions.cooldowns+=/touch_of_the_magi,use_off_gcd=1,if=(buff.arcane_surge.up&debuff.touch_of_the_magi.down)
+actions.cooldowns+=/arcane_surge
+
+# orb mastery, eureka, orb barrage, HV, charged orb
+# touch duration/surge duration
+# HV, charged missiles, AA/OPM, totm/surge overcap as well as pooling
+# clipping or not - focusing crystal, AA/OPM, HV, eureka
+# salvo stacks vs resonance, mana adept vs evocation, enlightened, salvo refunder
+
+
+actions.spellslinger_st=arcane_orb,if=buff.arcane_charge.stack<4
+actions.spellslinger_st+=/presence_of_mind,if=debuff.touch_of_the_magi.remains<gcd.max
+actions.spellslinger_st+=/arcane_blast,if=buff.presence_of_mind.up
+actions.spellslinger_st+=/arcane_barrage,if=buff.arcane_salvo.stack=20|(cooldown.arcane_orb.ready&buff.arcane_charge.stack=4&buff.clearcasting.react)
+actions.spellslinger_st+=/arcane_missiles,if=buff.clearcasting.react&(!talent.orb_mastery|buff.clearcasting.react=3|(talent.high_voltage&buff.arcane_charge.stack<3)|(buff.overpowered_missiles.react&cooldown.arcane_orb.charges_fractional<0.3)),interrupt_if=tick_time>gcd.remains&!buff.overpowered_missiles.react,interrupt_immediate=1,interrupt_global=1,chain=1
+actions.spellslinger_st+=/arcane_blast
+actions.spellslinger_st+=/evocation,if=mana.pct<10
+actions.spellslinger_st+=/arcane_barrage
+
+
+actions.spellslinger_aoe=arcane_orb,if=buff.arcane_charge.stack<4|(buff.clearcasting.react&talent.orb_mastery)
+actions.spellslinger_aoe+=/arcane_barrage,if=buff.arcane_salvo.stack=20|cooldown.arcane_orb.ready&buff.arcane_charge.stack=4
+actions.spellslinger_aoe+=/arcane_missiles,if=buff.clearcasting.react&(!talent.orb_mastery|buff.clearcasting.react=3|(talent.high_voltage&buff.arcane_charge.stack<3)|(buff.overpowered_missiles.react&cooldown.arcane_orb.charges_fractional<0.3)),interrupt_if=tick_time>gcd.remains,interrupt_immediate=1,interrupt_global=1,chain=1
+actions.spellslinger_aoe+=/arcane_pulse
+actions.spellslinger_aoe+=/arcane_blast
+actions.spellslinger_aoe+=/arcane_barrage
+
+
+
+
+head=,id=250060,ilevel=289
+neck=,id=249368,ilevel=289
+shoulders=,id=250058,ilevel=289
+back=,id=250055,ilevel=289
+chest=,id=250063,ilevel=289
+wrists=,id=250056,ilevel=289
+hands=,id=250061,ilevel=289
+waist=,id=250057,ilevel=289
+legs=,id=250059,ilevel=289
+feet=,id=250062,ilevel=289
+finger1=,id=249919,ilevel=289
+finger2=,id=249920,ilevel=289
+trinket1=galactic_gladiators_badge_of_ferocity,id=255613,ilevel=262
+trinket2=galactic_gladiators_insignia_of_alacrity,id=255614,ilevel=262
+main_hand=,id=249286,ilevel=289
+off_hand=
