@@ -81,5 +81,9 @@ build_simc_reports.py resolves simc.exe by checking:
 - If ports are busy (8050), close previous dashboards or change the port.
 - You can re-run individual steps by running the scripts directly.
 
+## Credits
+- Talent logic adapted from simc-talent-generator by Vít Šefl (MIT): https://github.com/vituscze/simc-talent-generator
+	See THIRD_PARTY_NOTICES.md for license details.
+
 ## License
-Choose a license for your repo when you publish to GitHub.
+MIT. See LICENSE for details.
