@@ -28,6 +28,9 @@ talents.json
 sim_proc_combined_results.csv
 .gitignore
 
+# Temporary not alloweds
+analyze_explore_effects.py
+
 # Logs/temp
 *.log
 *.tmp
