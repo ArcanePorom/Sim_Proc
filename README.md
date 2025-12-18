@@ -83,7 +83,7 @@ build_simc_reports.py resolves simc.exe by checking:
 
 ## Credits
 - Talent logic adapted from simc-talent-generator by Vít Šefl (MIT): https://github.com/vituscze/simc-talent-generator
-	See THIRD_PARTY_NOTICES.md for license details.
+  See THIRD_PARTY_NOTICES.md for license details.
 
 ## License
 MIT. See LICENSE for details.

@@ -23,6 +23,10 @@ vendor/
 # Simulation outputs (generated)
 simc_data/
 Temp/
+reports/
+talents.json
+sim_proc_combined_results.csv
+.gitignore
 
 # Logs/temp
 *.log

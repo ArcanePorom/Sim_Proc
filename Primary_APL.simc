@@ -68,7 +68,15 @@ profileset_output_data=race/:gear/:stats/:talents
 
 
 # Explore
-
+# copy=missiles_more
+# actions.spellslinger_st=arcane_orb,if=buff.arcane_charge.stack<1&(buff.clearcasting.react=0|buff.clearcasting.react=3)
+# actions.spellslinger_st+=/presence_of_mind,if=debuff.touch_of_the_magi.remains<gcd.max
+# actions.spellslinger_st+=/arcane_blast,if=buff.presence_of_mind.up
+# actions.spellslinger_st+=/arcane_barrage,if=buff.arcane_salvo.stack=20&buff.arcane_charge.stack=4
+# actions.spellslinger_st+=/arcane_missiles,if=buff.clearcasting.react,interrupt_if=tick_time>gcd.remains&(!buff.overpowered_missiles.react),interrupt_immediate=1,interrupt_global=1,chain=1
+# actions.spellslinger_st+=/arcane_blast
+# actions.spellslinger_st+=/evocation,if=mana.pct<10&buff.arcane_surge.down&cooldown.arcane_surge.remains>10
+# actions.spellslinger_st+=/arcane_barrage
 
 
 
@@ -84,7 +92,7 @@ level=90
 race=void_elf
 role=spell
 position=back
-talents=C4DAAAAAAAAAAAAAAAAAAAAAAYGmZZmZmFmZGaGzAAAwAAgAmZmZZZmJWAAYbmZmZmZbx2MzMLjxYMzMGbMzMjBAwAAAAzMzsAAwMAA
+talents=C4DAAAAAAAAAAAAAAAAAAAAAAYGmZZmZmFmZGaGzAAAwAAAAzMzssMzELAAsxMzMmtFLzMzsMGjxMzMjNmZmxMAADAAAmZmZWAAYGAA
 
 potion=disabled
 flask=disabled
@@ -120,9 +128,10 @@ actions+=/arcane_barrage
 
 # tota, aegwynn tech
 actions.cooldowns=arcane_orb,if=(buff.arcane_charge.stack<4|!talent.spellfire_spheres)&cooldown.arcane_surge.ready
-actions.cooldowns+=/arcane_blast,if=buff.arcane_charge.stack<4&variable.opener&!talent.arcane_orb
+actions.cooldowns+=/arcane_missiles,if=cooldown.arcane_surge.remains<(gcd.max*4)&buff.clearcasting.react&buff.arcane_salvo.stack<14
+actions.cooldowns+=/arcane_blast,if=variable.opener&buff.arcane_salvo.stack<20
 actions.cooldowns+=/arcane_barrage,if=buff.arcane_surge.up&variable.opener
-actions.cooldowns+=/touch_of_the_magi,use_off_gcd=1,if=(buff.arcane_surge.up&debuff.touch_of_the_magi.down)
+actions.cooldowns+=/touch_of_the_magi,use_off_gcd=1,if=buff.arcane_surge.up&debuff.touch_of_the_magi.down
 actions.cooldowns+=/arcane_surge
 
 # orb mastery, eureka, orb barrage, HV, charged orb
@@ -133,12 +142,18 @@ actions.cooldowns+=/arcane_surge
 
 
 actions.spellslinger_st=arcane_orb,if=buff.arcane_charge.stack<4
+
 actions.spellslinger_st+=/presence_of_mind,if=debuff.touch_of_the_magi.remains<gcd.max
 actions.spellslinger_st+=/arcane_blast,if=buff.presence_of_mind.up
-actions.spellslinger_st+=/arcane_barrage,if=buff.arcane_salvo.stack=20|(cooldown.arcane_orb.ready&buff.arcane_charge.stack=4&buff.clearcasting.react)
-actions.spellslinger_st+=/arcane_missiles,if=buff.clearcasting.react&(!talent.orb_mastery|buff.clearcasting.react=3|(talent.high_voltage&buff.arcane_charge.stack<3)|(buff.overpowered_missiles.react&cooldown.arcane_orb.charges_fractional<0.3)),interrupt_if=tick_time>gcd.remains&!buff.overpowered_missiles.react,interrupt_immediate=1,interrupt_global=1,chain=1
+
+actions.spellslinger_st+=/arcane_barrage,if=buff.arcane_salvo.stack=20&buff.arcane_charge.stack=4
+
+actions.spellslinger_st+=/arcane_missiles,if=buff.clearcasting.react&(!talent.orb_mastery|buff.clearcasting.react=3|(talent.high_voltage&buff.arcane_charge.stack<3)|(buff.overpowered_missiles.react&cooldown.arcane_orb.charges_fractional<0.3)),interrupt_if=tick_time>gcd.remains&(!buff.overpowered_missiles.react),interrupt_immediate=1,interrupt_global=1,chain=1
+
 actions.spellslinger_st+=/arcane_blast
-actions.spellslinger_st+=/evocation,if=mana.pct<10
+
+actions.spellslinger_st+=/evocation,if=mana.pct<10&buff.arcane_surge.down&cooldown.arcane_surge.remains>10
+
 actions.spellslinger_st+=/arcane_barrage
 
 
