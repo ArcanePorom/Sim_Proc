@@ -1298,18 +1298,48 @@ def generate_profilesets(n_clicks, included, blocked, included2, nodes_store, cl
                                 # Zero sibling options in hero choice nodes
                                 # Build hero pair map once per iteration tree_name
                                 hero_choice_pairs = build_choice_pair_map(hero_groups.get(tree_name, []))
-                                ht_main = talent_str(hero_build)
-                                zero_parts = []
+                                # Build deduped hero talents mapping: prefer non-zero ranks from main build
+                                main_map = dict(hero_build)  # id -> rank
+                                zero_ids_set = set()
+                                # Zero sibling choices for selected choices in this hero tree
                                 for tid, pts in hero_build.items():
                                     if pts and pts > 0 and tid in hero_choice_pairs:
-                                        zero_parts.append(f"{hero_choice_pairs[tid]}:0")
+                                        zero_ids_set.add(hero_choice_pairs[tid])
+                                # Zero all entries from other hero tree(s)
                                 for other_name, other_group in hero_groups.items():
                                     if other_name == tree_name:
                                         continue
                                     zeros = zero_ids_for_other_hero_tree(other_group)
-                                    zero_parts.extend([f"{eid}:0" for eid in zeros])
-                                ht_full = '/'.join([p for p in [ht_main] if p] + zero_parts)
-                                if ht_full:
+                                    zero_ids_set.update(zeros)
+                                # Merge: add zeros only for ids not present in main_map
+                                merged_map = dict(main_map)
+                                for eid in zero_ids_set:
+                                    if eid not in merged_map:
+                                        merged_map[eid] = 0
+                                # Minimal enforcement: active tree opening = 1, other tree opening = 0
+                                try:
+                                    entries = spec_obj.subtree_node.get('entries', [])
+                                    name_to_eid = {}
+                                    for e in entries:
+                                        stid = e.get('traitSubTreeId')
+                                        candidates = [n for n in getattr(spec_obj.hero, 'nodes', {}).values() if getattr(n, 'sub_tree', None) == stid]
+                                        if not candidates:
+                                            continue
+                                        opening_node = min(candidates, key=lambda n: getattr(n, 'req_points', 0))
+                                        if getattr(opening_node, 'choices', []):
+                                            opening_eid = opening_node.choices[0].id
+                                            name_to_eid[tokenize(e.get('name', '') or '')] = opening_eid
+                                    active_name = tokenize(tree_name)
+                                    active_eid = name_to_eid.get(active_name)
+                                    if active_eid is not None:
+                                        merged_map[active_eid] = 1
+                                    for nname, eid in name_to_eid.items():
+                                        if nname != active_name and eid not in merged_map:
+                                            merged_map[eid] = 0
+                                except Exception:
+                                    pass
+                                if merged_map:
+                                    ht_full = '/'.join(f"{tid}:{pts}" for tid, pts in sorted(merged_map.items()))
                                     block.append(f"hero_talents={ht_full}")
                                 lines.append("\n".join(block))
                                 idx += 1
@@ -1550,18 +1580,45 @@ def generate_profilesets_psets(n_clicks, included, blocked, included2, nodes_sto
                                             a, b = ids
                                             hero_choice_pairs[a] = b
                                             hero_choice_pairs[b] = a
-                                ht_main = talent_str(hero_build)
-                                zero_parts = []
+                                # Dedup hero talents: prefer non-zero ranks from main build
+                                main_map = dict(hero_build)
+                                zero_ids_set = set()
                                 for tid, pts in hero_build.items():
                                     if pts and pts > 0 and tid in hero_choice_pairs:
-                                        zero_parts.append(f"{hero_choice_pairs[tid]}:0")
+                                        zero_ids_set.add(hero_choice_pairs[tid])
                                 for other_name, other_group in hero_groups.items():
                                     if other_name == tree_name:
                                         continue
                                     zeros = zero_ids_for_other_hero_tree(other_group)
-                                    zero_parts.extend([f"{eid}:0" for eid in zeros])
-                                ht_full = '/'.join([p for p in [ht_main] if p] + zero_parts)
-                                if ht_full:
+                                    zero_ids_set.update(zeros)
+                                merged_map = dict(main_map)
+                                for eid in zero_ids_set:
+                                    if eid not in merged_map:
+                                        merged_map[eid] = 0
+                                # Minimal enforcement: active tree opening = 1, other tree opening = 0
+                                try:
+                                    entries = spec_obj.subtree_node.get('entries', [])
+                                    name_to_eid = {}
+                                    for e in entries:
+                                        stid = e.get('traitSubTreeId')
+                                        candidates = [n for n in getattr(spec_obj.hero, 'nodes', {}).values() if getattr(n, 'sub_tree', None) == stid]
+                                        if not candidates:
+                                            continue
+                                        opening_node = min(candidates, key=lambda n: getattr(n, 'req_points', 0))
+                                        if getattr(opening_node, 'choices', []):
+                                            opening_eid = opening_node.choices[0].id
+                                            name_to_eid[tokenize(e.get('name', '') or '')] = opening_eid
+                                    active_name = tokenize(tree_name)
+                                    active_eid = name_to_eid.get(active_name)
+                                    if active_eid is not None:
+                                        merged_map[active_eid] = 1
+                                    for nname, eid in name_to_eid.items():
+                                        if nname != active_name and eid not in merged_map:
+                                            merged_map[eid] = 0
+                                except Exception:
+                                    pass
+                                if merged_map:
+                                    ht_full = '/'.join(f"{tid}:{pts}" for tid, pts in sorted(merged_map.items()))
                                     lines.append(f"profileset.\"{name}\"+=hero_talents={ht_full}")
                                 idx += 1
             else:
@@ -1569,7 +1626,7 @@ def generate_profilesets_psets(n_clicks, included, blocked, included2, nodes_sto
                 for class_build in class_builds:
                     for spec_build in spec_builds:
                         name = f"{base_name}_{idx}"
-                        if include_class:
+                        if include_class:   
                             ct = talent_str(class_build)
                             if ct:
                                 lines.append(f"profileset.\"{name}\"+=class_talents={ct}")

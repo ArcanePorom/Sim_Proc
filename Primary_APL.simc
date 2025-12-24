@@ -68,19 +68,20 @@ profileset_output_data=race/:gear/:stats/:talents
 
 
 # Explore
-# copy=missiles_more
-# actions.spellslinger_st=arcane_orb,if=buff.arcane_charge.stack<1&(buff.clearcasting.react=0|buff.clearcasting.react=3)
-# actions.spellslinger_st+=/presence_of_mind,if=debuff.touch_of_the_magi.remains<gcd.max
-# actions.spellslinger_st+=/arcane_blast,if=buff.presence_of_mind.up
-# actions.spellslinger_st+=/arcane_barrage,if=buff.arcane_salvo.stack=20&buff.arcane_charge.stack=4
-# actions.spellslinger_st+=/arcane_missiles,if=buff.clearcasting.react,interrupt_if=tick_time>gcd.remains&(!buff.overpowered_missiles.react),interrupt_immediate=1,interrupt_global=1,chain=1
-# actions.spellslinger_st+=/arcane_blast
-# actions.spellslinger_st+=/evocation,if=mana.pct<10&buff.arcane_surge.down&cooldown.arcane_surge.remains>10
-# actions.spellslinger_st+=/arcane_barrage
+# copy="2t"
+# desired_targets=2
 
+# copy="3t"
+# desired_targets=3
 
+# copy="4t"
+# desired_targets=4
 
+# copy="5t"
+# desired_targets=5
 
+# copy="10t"
+# desired_targets=10
 
 
 
@@ -92,7 +93,10 @@ level=90
 race=void_elf
 role=spell
 position=back
-talents=C4DAAAAAAAAAAAAAAAAAAAAAAYGmZZmZmFmZGaGzAAAwAAAAzMzssMzELAAsxMzMmtFLzMzsMGjxMzMjNmZmxMAADAAAmZmZWAAYGAA
+class_talents=80140:0/80141:1/80142:1/80143:0/80144:0/80147:1/80153:1/80155:1/80157:1/80159:2/80161:1/80163:1/80165:0/80168:0/80170:2/80173:2/80174:1/80175:1/80181:1/80182:2/80183:0/80187:1/80189:0/115877:1/115878:1/125818:1/125819:0/126060:1/134182:1/134183:0/134184:1/134187:1/134188:1/134189:1/134190:1/134191:1/134192:0/134194:1/134197:0/134198:0/134199:0/136466:0/136576:0/136577:0/136578:1/136579:1/136580:0/136581:0/134197:0/134183:0/136580:0/125819:0
+spec_talents=126508:0/126509:0/126510:1/126511:1/126515:1/126516:1/126519:1/126521:0/126523:1/126524:0/126530:1/126532:0/126537:1/126538:1/126539:1/126540:1/126541:1/126542:1/126543:1/126544:0/126545:1/126546:0/126550:2/128689:1/134020:1/134022:0/134023:0/134024:1/134025:0/134026:2/134027:1/134028:1/134030:1/134047:1/134196:1/134834:1/135698:1/135699:0/135700:1/135701:2/135702:1/136465:1/135699:0/126524:0/134025:0/134022:0
+hero_talents=117246:0/117247:0/117248:0/117249:0/117250:0/117251:0/117252:0/117253:0/117254:0/117255:0/117256:0/117257:1/117258:1/117259:1/117261:1/117262:1/117263:1/117264:1/117265:1/117266:1/117267:1/123417:0/123418:0/123867:0/128267:1/134249:0/135598:0/135918:1/135919:1/135920:1/135924:0/135925:0/135926:0/135946:0
+
 
 potion=disabled
 flask=disabled
@@ -123,7 +127,9 @@ actions+=/arcane_barrage,if=fight_remains<2
 actions+=/variable,name=opener,op=set,if=debuff.touch_of_the_magi.up&variable.opener,value=0
 actions+=/call_action_list,name=cooldowns,if=cooldown.arcane_surge.up|cooldown.touch_of_the_magi.up
 actions+=/call_action_list,name=spellslinger_aoe,if=!talent.spellfire_spheres&active_enemies>variable.aoe_target_count
+actions+=/call_action_list,name=sunfury_aoe,if=active_enemies>variable.aoe_target_count
 actions+=/call_action_list,name=spellslinger_st,if=!talent.spellfire_spheres
+actions+=/call_action_list,name=sunfury_st
 actions+=/arcane_barrage
 
 # tota, aegwynn tech
@@ -140,22 +146,14 @@ actions.cooldowns+=/arcane_surge
 # clipping or not - focusing crystal, AA/OPM, HV, eureka
 # salvo stacks vs resonance, mana adept vs evocation, enlightened, salvo refunder
 
-
 actions.spellslinger_st=arcane_orb,if=buff.arcane_charge.stack<4
-
 actions.spellslinger_st+=/presence_of_mind,if=debuff.touch_of_the_magi.remains<gcd.max
 actions.spellslinger_st+=/arcane_blast,if=buff.presence_of_mind.up
-
 actions.spellslinger_st+=/arcane_barrage,if=buff.arcane_salvo.stack=20&buff.arcane_charge.stack=4
-
 actions.spellslinger_st+=/arcane_missiles,if=buff.clearcasting.react&(!talent.orb_mastery|buff.clearcasting.react=3|(talent.high_voltage&buff.arcane_charge.stack<3)|(buff.overpowered_missiles.react&cooldown.arcane_orb.charges_fractional<0.3)),interrupt_if=tick_time>gcd.remains&(!buff.overpowered_missiles.react),interrupt_immediate=1,interrupt_global=1,chain=1
-
 actions.spellslinger_st+=/arcane_blast
-
 actions.spellslinger_st+=/evocation,if=mana.pct<10&buff.arcane_surge.down&cooldown.arcane_surge.remains>10
-
 actions.spellslinger_st+=/arcane_barrage
-
 
 actions.spellslinger_aoe=arcane_orb,if=buff.arcane_charge.stack<4|(buff.clearcasting.react&talent.orb_mastery)
 actions.spellslinger_aoe+=/arcane_barrage,if=buff.arcane_salvo.stack=20|cooldown.arcane_orb.ready&buff.arcane_charge.stack=4
@@ -164,8 +162,20 @@ actions.spellslinger_aoe+=/arcane_pulse
 actions.spellslinger_aoe+=/arcane_blast
 actions.spellslinger_aoe+=/arcane_barrage
 
+actions.sunfury_st=touch_of_the_magi,use_off_gcd=1
+actions.sunfury_st+=/arcane_barrage,if=buff.arcane_soul.up
+actions.sunfury_st+=/arcane_barrage,if=buff.arcane_charge.stack=4&debuff.touch_of_the_magi.up&debuff.touch_of_the_magi.remains<=gcd.max*1.05
+actions.sunfury_st+=/arcane_barrage,if=buff.arcane_charge.stack=4&buff.clearcasting.react
+actions.sunfury_st+=/arcane_missiles,if=buff.arcane_charge.stack<2|(buff.clearcasting.react&buff.overpowered_missiles.down)&buff.arcane_salvo.stack<18
+actions.sunfury_st+=/arcane_orb,if=buff.arcane_charge.stack<2
+actions.sunfury_st+=/arcane_blast
 
-
+actions.sunfury_aoe=arcane_orb,if=buff.arcane_charge.stack<4|(buff.clearcasting.react&talent.orb_mastery)
+actions.sunfury_aoe+=/arcane_barrage,if=buff.arcane_salvo.stack=20|cooldown.arcane_orb.ready&buff.arcane_charge.stack=4
+actions.sunfury_aoe+=/arcane_missiles,if=buff.clearcasting.react&(!talent.orb_mastery|buff.clearcasting.react=3|(talent.high_voltage&buff.arcane_charge.stack<3)|(buff.overpowered_missiles.react&cooldown.arcane_orb.charges_fractional<0.3)),interrupt_if=tick_time>gcd.remains,interrupt_immediate=1,interrupt_global=1,chain=1
+actions.sunfury_aoe+=/arcane_pulse
+actions.sunfury_aoe+=/arcane_blast
+actions.sunfury_aoe+=/arcane_barrage
 
 head=,id=250060,ilevel=289
 neck=,id=249368,ilevel=289

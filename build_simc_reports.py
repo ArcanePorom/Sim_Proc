@@ -248,6 +248,21 @@ if __name__ == "__main__":
 
     print(f"\n🔍 Found {len(actor_names)-1} # Explore actors")
     print(f"📎 Found {len(profile_blocks)} profile blocks\n")
+    # Print total sims (runs of simc) and total profiles queued
+    try:
+        y_explore = max(0, len(actor_names) - 1)
+        x_blocks = len(profile_blocks)
+        actor_count = 1 + y_explore
+        # Chunks per actor: ceil(x_blocks / PROFILES_PER_SIM)
+        chunks_per_actor = (x_blocks + PROFILES_PER_SIM - 1) // PROFILES_PER_SIM if PROFILES_PER_SIM > 0 else 1
+        sims_total = actor_count * chunks_per_actor
+        extra_due_to_limit = max(0, chunks_per_actor - 1) * actor_count
+        # Total profiles: for each actor, all x_blocks profiles plus one baseline per chunk
+        total_profiles = actor_count * (x_blocks + chunks_per_actor)
+        # Example when chunks_per_actor=1 → (x+1)*(y+1)
+        print(f"🧮 Total profiles queued: {total_profiles}\n")
+    except Exception: 
+        print("🧮 Total sims to run: (unavailable)\n")
 
     jobs = []
     for actor in actor_names:
